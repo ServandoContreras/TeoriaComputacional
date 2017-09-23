@@ -1,0 +1,146 @@
+import java.util.Scanner;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ *
+ * @author Servando López Contreras 140285
+ * E(r) = b*(a + b)*
+ * Las entradas posibles son a's o b's, cada qn representa un estado,
+ * la cadena asignada se convierte en un arreglo de caracteres para
+ * evaluarlo por separado, así cada elemento de la cadena, se copiará a una posición
+ * de la cadena de caracteres.
+ * Se llama al estado inicial que comienza a evaluar cada estado, iniciando un contador en 0,
+ * cada estado es evaluado por los distintos caminos que pueden existir en la expresión,
+ * retornando a un estado de aceptación o un estado de error si la cadena es inválida.
+ * 
+ * Los posibles estados de la cadena es que pueda ir son: tanto al estado a o b.
+ * La expresión permite que pueda iniciar con b, o pueda iniciar con abab, 
+ * ambas tendrían que ser válidas, por ejemplo:
+ * bab Válida 
+ * abab Válida
+ * aab Inválida por como se definio la expresión regular y conseguiente el automáta.
+ * Por otro lado la cadena no válida podría ser baa, debido a que la expresión regular
+ * fuerza un estado para que la cadena siempre termine con ab.
+ * 
+ */
+public class Automata {
+     int cont;
+     char [] car;
+    boolean aceptado;
+
+    public static void main(String[] args) {
+          
+        String cadena;
+        System.out.println("Ingrese cadena: ");
+        //String cadena ="bab"; - > b*(a+b)*
+        Scanner teclado=new Scanner(System.in);
+        Automata aut = new Automata();
+        cadena=teclado.next();
+       
+        aut.car = cadena.toCharArray();
+        aut.inicio();
+        if(aut.aceptado)
+             System.out.println("Aceptación");
+        else System.out.println("No aceptación");
+    }
+   public void inicio(){
+           cont =0;
+           q0();
+   }
+   public void q0(){
+       System.out.println("En q0");
+       aceptado=false;
+    if(cont<car.length){
+       if(car[cont]=='a'){
+            cont++;
+            q1();
+       }else if(car[cont]=='b'){
+            cont++;
+            q2();
+       }
+    }
+   
+   }
+   public void q1(){
+     System.out.println("En q1");
+    if(cont<car.length){
+       if(car[cont]=='b'){
+            cont++;
+            q2();
+       }
+       if(car[cont]=='a'){
+            cont++;
+            q1();
+       }
+    }
+   }
+   public void q2(){
+     System.out.println("En q2");
+    if(cont<car.length){
+       if(car[cont]=='a'){
+            cont++;
+            q2();
+       }else if(car[cont]=='b'){
+            cont++;
+            q3();
+       } 
+    }
+   
+   }
+   public void q3(){
+     System.out.println("En q3 ");
+     aceptado=true;
+    
+    if(cont<car.length){
+       
+       if(car[cont]=='a'){
+            cont++;
+            q3();
+       }else if(car[cont]=='b'){
+            cont++;
+            qerror();
+            
+       }
+    }
+   
+   }
+      public void q4(){
+     System.out.println("En q4");
+    if(cont<car.length){
+       if(car[cont]=='a'){
+            cont++;
+            q4();
+       }else if(car[cont]=='b'){
+            cont++;
+            q5();
+       } 
+    }
+   }
+      public void q5(){
+     System.out.println("En q5 ");
+     aceptado=true;
+
+    if(cont<car.length){
+
+       if(car[cont]=='a'){
+            cont++;
+            q5();
+       }else if(car[cont]=='b'){
+            cont++;
+            qerror();
+
+       }
+    }
+
+   }
+
+   public void qerror(){
+   System.out.println("Error");
+   aceptado = false;
+   }   
+}
